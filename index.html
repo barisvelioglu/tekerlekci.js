@@ -1,0 +1,129 @@
+<html>
+  <head>
+    <style type="text/css">
+
+      .tekerlekci {
+        width: 190px;
+        overflow: auto;
+        float: left;
+        background: crimson;
+        font-size: 30px
+      }
+
+      .tekerlekci ul {
+        list-style: none;
+        margin-top: -20px;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+
+      }
+      .tekerlekci li {
+        text-align: center;
+        height: 50px;
+        line-height: 150%;
+        color: #e0e0e0;
+        cursor: default;
+
+      }
+      .fader {
+        color: #ccc !important;
+    
+      }
+      .fade {
+     
+        color: #7e828a !important;
+      }
+      .active {
+        background-color: #000;
+        color: #fff;
+      }
+      
+      ::-webkit-scrollbar {
+          width: 0px;  /* remove scrollbar space */
+          background: transparent;  /* optional: just make scrollbar invisible */
+      }
+      /* optional: show position indicator in red */
+      ::-webkit-scrollbar-thumb {
+          background: #FF0000;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <div class="tekerlekci" onscroll="moveValue(this)">
+      <ul>
+        <li style="display:none"> </li>
+        <li> </li>
+        <li>10.5</li>
+        <li>11.0</li>
+        <li>11.5</li>
+        <li>12.5</li>
+        <li>13.0</li>
+        <li>13.5</li>
+        <li>14.0</li>
+        <li>14.5</li>
+        <li>15.0</li>
+        <li>15.5</li>
+        <li>16.0</li>
+
+        <li style="display:none"> </li>
+      </ul>
+    </div> 
+
+    <script type="text/javascript">
+
+            var scrollTimer = -1;
+            var changedTimer = -1;
+            var exShowElCount = 2; // 3 lü gösterim için değeri 2 olmalı.
+            var liHeight = document.querySelectorAll(".tekerlekci li")[1].offsetHeight;
+
+            document.getElementsByClassName("tekerlekci")[0].style.height = (liHeight * 2 + 4) + "px";
+
+            function setValue(hr) {
+              setIfPresent(document.querySelectorAll('.tekerlekci li')[hr], 'active');
+              document.querySelectorAll('.tekerlekci')[0].scrollTop = (hr)*liHeight;
+            }
+
+            function moveValue(hr) {
+
+              var tp = hr.scrollTop;
+              var ind = Math.floor((tp + liHeight / 2) / liHeight) + exShowElCount;
+            
+              var d = document.querySelectorAll('.tekerlekci li');
+              setIfPresent(document.querySelectorAll('.tekerlekci li.active')[0], '');
+              setIfPresent(document.querySelectorAll('.tekerlekci li.fade')[0], '');
+              setIfPresent(document.querySelectorAll('.tekerlekci li.fade')[0], '');
+              setIfPresent(document.querySelectorAll('.tekerlekci li.fader')[0], '');
+              setIfPresent(document.querySelectorAll('.tekerlekci li.fader')[0], '');
+
+              setIfPresent(d[ind], 'active');
+              setIfPresent(d[ind-1], 'fade');
+              setIfPresent(d[ind+1], 'fade');
+              setIfPresent(d[ind-1], 'fader');
+              setIfPresent(d[ind+2], 'fader');
+
+              if (scrollTimer != -1)
+                clearTimeout(scrollTimer);
+                clearTimeout(changedTimer);
+
+                scrollTimer = window.setTimeout(function(){
+                     document.querySelectorAll('.tekerlekci')[0].scrollTop = (ind-exShowElCount)*liHeight;
+                }, 30);
+
+                changedTimer = window.setTimeout(function(){
+                  console.log(document.querySelectorAll('li.active')[0].innerText);
+                }, 500);
+            }
+
+            function setIfPresent(elem, cls) {
+              if(typeof elem !== 'undefined') {
+                elem.className = cls;
+              }
+            }
+
+     
+    </script>
+
+  </body>
+</html>
